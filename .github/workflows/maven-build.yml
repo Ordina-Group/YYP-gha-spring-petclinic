@@ -60,3 +60,4 @@ jobs:
             }
           }' \
             --region eu-west-1
+          aws apprunner start-deployment --service-arn arn:aws:apprunner:eu-west-1:831947081981:service/YPP-actions-pet-clinic/b8e4f790ee074f5a8567cad6e0d01771
