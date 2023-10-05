@@ -26,7 +26,7 @@ jobs:
           distribution: 'adopt'
           cache: maven
       - name: Build image
-        run: ./mvnw spring-boot:build-image -Dspring-boot.build-image.imageName=264585740784.dkr.ecr.eu-west-1.amazonaws.com/ypp-github-actions/app:v1
+        run: ./mvnw spring-boot:build-image -Dspring-boot.build-image.imageName=831947081981.dkr.ecr.eu-west-1.amazonaws.com/ypp-github-actions/app:v1
 
       - name: Login to Amazon ECR Public
         id: login-ecr-public
