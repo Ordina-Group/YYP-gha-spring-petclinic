@@ -48,18 +48,15 @@ jobs:
           IMAGE_TAG: v2
         run: |
           docker push $REGISTRY/$REPOSITORY:$IMAGE_TAG
-          
-      - name: Deploy to App Runner Image
-        id: deploy-apprunner
-        uses: awslabs/amazon-app-runner-deploy@main
-        with:
-          service: YPP-actions-pet-clinic
-          image: ${{ steps.build-image.outputs.image }}
-          access-role-arn: arn:aws:apprunner:eu-west-1:831947081981:service/YPP-actions-pet-clinic/b8e4f790ee074f5a8567cad6e0d01771
-          region: eu-west-1
-          cpu : 1
-          memory : 2
-          # Deprecated: wait-for-service-stability: true
-          # The new way to control service stability timeout
-          wait-for-service-stability-seconds: 1200
 
+      - name: Push new version of image to Aws App Runner
+        run: |
+          aws apprunner update-service \
+            --service-arn arn:aws:apprunner:eu-west-1:831947081981:service/YPP-actions-pet-clinic/b8e4f790ee074f5a8567cad6e0d01771 \
+            --source-configuration '{
+            "ImageRepository": {
+              "ImageIdentifier": "831947081981.dkr.ecr.eu-west-1.amazonaws.com/ypp-github-actions:v2",
+              "ImageRepositoryType": "ECR"
+            }
+          }' \
+            --region eu-west-1
