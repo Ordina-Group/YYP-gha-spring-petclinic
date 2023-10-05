@@ -9,9 +9,12 @@ on:
   pull_request:
     branches: [ main ]
 
+permissions:
+  id-token: write
+  contents: read
+  
 jobs:
   build:
-
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -28,15 +31,19 @@ jobs:
       - name: Build image
         run: ./mvnw spring-boot:build-image -Dspring-boot.build-image.imageName=831947081981.dkr.ecr.eu-west-1.amazonaws.com/ypp-github-actions/app:v1
 
-      - name: Login to Amazon ECR Public
-        id: login-ecr-public
-        uses: aws-actions/amazon-ecr-login@v2
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
         with:
-          registry-type: public
+          role-to-assume: arn:aws:iam::831947081981:role/YPP-github-actions
+          aws-region: eu-west-1
+
+      - name: Login to Amazon ECR Public
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
 
       - name: Push docker image to Amazon ECR Public
         env:
-          REGISTRY: ${{ steps.login-ecr-public.outputs.registry }}
+          REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           REPOSITORY: 264585740784.dkr.ecr.eu-west-1.amazonaws.com/ypp-github-actions
           IMAGE_TAG: 1
         run: |
