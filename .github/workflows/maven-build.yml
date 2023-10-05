@@ -29,9 +29,9 @@ jobs:
         run: ./mvnw -B package
 
       - name: Build image
-        run: mvn spring-boot:build-image
-
-      
+        run: ./mvnw spring-boot:build-image -Dspring-boot.build-image.imageName=264585740784.dkr.ecr.eu-west-1.amazonaws.com/ypp-github-actions/app:v1
 
 
-    
+
+
+
